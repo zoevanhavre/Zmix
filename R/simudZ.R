@@ -2,7 +2,7 @@
 #' Simulate Univariate normal Mixture
 #'
 #' ...
-#' @param  Means, covariance, Sample size, weights
+#' @param  n,mu,sig,p,k
 #' @keywords Wishart
 #' @export
 #' @examples

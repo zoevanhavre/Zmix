@@ -7,7 +7,7 @@
 simudZ(n, mu, sig, p, k)
 }
 \arguments{
-\item{Means,}{covariance, Sample size, weights}
+\item{n,mu,sig,p,k}{}
 }
 \description{
 ...
