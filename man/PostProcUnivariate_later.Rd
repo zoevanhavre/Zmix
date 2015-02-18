@@ -9,7 +9,7 @@ PostProcUnivariate_later(Grun, mydata, LineUp = 1, prep = 10000,
   nEnd = 2000)
 }
 \arguments{
-\item{v}{and s}
+\item{Grun,}{mydata, LineUp, prep, Propmin, isSim, simlabel, savelabel, nEnd.}
 }
 \description{
 This function draws samples from a Wishart dist

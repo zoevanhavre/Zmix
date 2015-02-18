@@ -1,7 +1,7 @@
 #' PostProcessing function univ
 #'
 #' This function draws samples from a Wishart dist
-#' @param v and s
+#' @param Grun, mydata, LineUp, prep, Propmin, isSim, simlabel, savelabel, nEnd.
 #' @keywords Wishart
 #' @export
 #' @examples
