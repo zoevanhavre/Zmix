@@ -68,41 +68,44 @@
 			Zref<-factor(out_trim$Zs[,	wml], levels=1:K,ordered=FALSE) 
 			if (LineUpBy==1){	
 				FinalOrderChoice<-order(out_trim$Ps[wml,], decreasing=TRUE)		
-				non0ref<-FinalOrderChoice[1:sum(table(Zref)>0)]
-				refComp<-c(out_trim$P[wml,non0ref], out_trim$Mu[wml,non0ref], out_trim$Sig[wml,non0ref])
-} else if(LineUpBy==2){	FinalOrderChoice<-order(out_trim$Mu[wml,], decreasing=TRUE)		
+			#	refPar<-out_trim$Ps[wml,FinalOrderChoice]##***##
+				# comparing pars:
 				non0ref<-FinalOrderChoice[1:sum(table(Zref)>0)]
 				refComp<-c(out_trim$P[wml,non0ref], out_trim$Mu[wml,non0ref], out_trim$Sig[wml,non0ref])
 
-			} else if(LineUpBy==3){	
+			} else if(LineUpBy==2){	
+				.all<-c(1:K)
+				.tbs<-table(Zref)
+				non0ref<- .all[.tbs>0]
+				non0ref<-non0ref[order(out_trim$Mu[wml, .tbs>0], decreasing=TRUE)]
+				refComp<-c(out_trim$P[wml,non0ref], out_trim$Mu[wml,non0ref], out_trim$Sig[wml,non0ref])
+
+			#non0ref<-FinalOrderChoice[1: sum(.tbs)]  
+			#refComp<-c(out_trim$P[wml,non0ref], out_trim$Mu[wml,non0ref], out_trim$Sig[wml,non0ref])
+
+			}else if(LineUpBy==3){	
 				.tbs<-table(Zref)
 				.tbs[.tbs>0]<-1
-				FinalOrderChoice	 <-order(.tbs*out_trim$Sig[wml,], decreasing=TRUE)
-				non0ref<-FinalOrderChoice[1: sum(.tbs)]  # not right?
+				FinalOrderChoice <-order(.tbs*out_trim$Sig[wml,], decreasing=TRUE)
+				non0ref<-FinalOrderChoice[1: sum(.tbs)]  
 				refComp<-c(out_trim$P[wml,non0ref], out_trim$Mu[wml,non0ref], out_trim$Sig[wml,non0ref])
 				# FinalOrderChoice<-order(out_trim$Sig[wml,], decreasing=TRUE)		
 # 				non0ref<-FinalOrderChoice[1:sum(table(Zref)>0)]
 # 				refComp<-c(out_trim$P[wml,non0ref], out_trim$Mu[wml,non0ref], out_trim$Sig[wml,non0ref])
 }
-
-# NEW testing? finish later.. got to undo it before computing error stats
-#if( sum(out_trim$Mu[wml,non0ref]==0)>0){
-#	out_trim$Mu<-out_trim$Mu+1
-#	refComp<-c(out_trim$P[wml,non0ref], out_trim$Mu[wml,non0ref]+1, out_trim$Sig[wml,non0ref])
-
-#}
-##
 			#levels(Zref)<-FinalOrderChoice
-			levels(Zref)<- c(1:K)[order(FinalOrderChoice)]
+# NEW
+			Zref<-factor(Zref)
+			levels(Zref)<- c(1:K)[order(non0ref)]
+			#levels(Zref)<- c(1:K)[order(FinalOrderChoice)]
 			Zref<- factor(Zref,levels(Zref)[order(levels(Zref))])
-			#ADD ?
-			Zref<- factor(Zref)
-
 			
+				#
+
+
+
 			# storage dataframes:
-		
-			numK0now<-sum(table(Zref )>0) 
-			AllPars<-data.frame('Iteration'=unlist(lapply(1:dim(out_trim$Zs)[2], rep, numK0now)), 'k'=0, 'P'=0, 'Mu'=0, 'Sig'=0)
+			AllPars<-data.frame('Iteration'=NA, 'k'=NA, 'Ps'=NA, 'Mu'=NA, 'Sig'=NA)[numeric(0), ]
 			Zfixed<-out_trim$Zs
 			#for each iteration
 			for(.iter in 1:dim(out_trim$Zs)[2]){
@@ -115,6 +118,7 @@
 				getCandi<-function(x) { as.numeric(as.character(row.names(as.matrix(x))[x])) }
 				ListCandi<- apply(CandiCells, 1, getCandi)
 				
+				#IF its a matrix, turn into list. If its a single choice, go fast.
 				# R stuff to make sure it deals with inputs correctly
 				if(class(ListCandi)=='matrix'){
 				ListCandi<-split(ListCandi, rep(1:ncol(ListCandi), each = nrow(ListCandi)))
@@ -128,43 +132,17 @@
 				}
 
 				namesCandies<-names(Candies)
-				# Catch if no appropriate seperation available at all, check all permutations of potential groups. Only occurs in really bad models with bad convergence.				
-				done<-0
+				# Catch if no appropriate seperation available at all, check all permutations. Only occurs in really bad models with bad convergence.				
 				if(class(Candies)=='data.frame'){
 				if  ( max(sapply(apply(Candies, 1, unique), length))<length(row.names(CandiCells))){
-					#Candies<- permutations(K)
-					Candies<- matrix(as.numeric(row.names(CandiCells)[permutations(length(row.names(CandiCells)))]), ncol=length(row.names(CandiCells)))	
-					 colnames(Candies)<-as.numeric(names(as.data.frame(CandiCells)))
+					Candies<- permutations(K)}
+					}else{
+						if  (length(unique(Candies))<length(row.names(CandiCells))){
+					Candies<- permutations(K)}
+					} 
 
-
-			MinusRefPars_catch<-function(x) 	{ flp<- Candies[x,]
-			if(length(unique(flp))<length(flp)) { Inf
-			} else {sum(abs( (refComp	-  c(out_trim$P[.iter,flp], out_trim$Mu[.iter,flp],out_trim$Sig[.iter,flp]))/refComp))	}}
-
-						BestOne<-which.min( sapply(1:dim(Candies)[1] , MinusRefPars_catch))  # find the best perm out of options
-						BestOne<-Candies[BestOne,]
-						#if(is.null(names(BestOne))) {names(BestOne)<-namesCandies}
-			
-						# Allocations  #Znew<-Znow; 
-						Znew<-factor(Znow, levels=BestOne)
-						levels(Znew)<-colnames(CandiCells)
-
-						Zfixed[,.iter]<-as.numeric(as.character(Znew))
-						# Parameters
-				#		combinePars<-cbind(.iter,BestOne,  out_trim$Ps[.iter,BestOne],out_trim$Mu[.iter,BestOne], out_trim$Sig[.iter,BestOne] )[order(BestOne, decreasing=FALSE),]
-				combinePars<-cbind(.iter,as.numeric(colnames(CandiCells)),  out_trim$Ps[.iter,BestOne],out_trim$Mu[.iter,BestOne], out_trim$Sig[.iter,BestOne] )
-						
-					AllPars[AllPars[1]==.iter,]<- combinePars
-						done<-1
-
-					}}
-					#else{
-					#	if  (length(unique(Candies))<length(row.names(CandiCells))){
-					#Candies<- permutations(K)}
-					#} 
-			if (done==0){
-			MinusRefPars<-function(x) 	{ flp<- as.numeric(  row.names(CandiCells)[unlist(Candies[x,])])
-						flp<-na.omit(flp)
+				MinusRefPars<-function(x) 	{ 
+					flp<- as.numeric(  row.names(CandiCells)[unlist(Candies[x,])])
 						if(length(unique(flp))<length(flp)) { Inf
 						} else {sum(abs( (refComp	-  c(out_trim$P[.iter,flp], out_trim$Mu[.iter,flp],out_trim$Sig[.iter,flp]))/refComp))	}}
 											
@@ -179,10 +157,9 @@
 				Zfixed[,.iter]<-as.numeric(as.character(Znew))
 				# Parameters
 				combinePars<-cbind(.iter,as.numeric(BestOne),  out_trim$Ps[.iter,as.numeric(names(BestOne))],out_trim$Mu[.iter,as.numeric(names(BestOne))], out_trim$Sig[.iter,as.numeric(names(BestOne))] )[order(as.numeric(BestOne), decreasing=FALSE),]
-				AllPars[AllPars[1]==.iter,]<- combinePars
-			}
-		}
-	
+				AllPars<-rbind(AllPars, combinePars)
+				}
+			names(AllPars)<-c('Iteration', 'k', 'P', 'Mu','Sig')
 			
 			# sumarise Zs (find max)
 			maxZ<-function (x)  as.numeric(names(which.max(table( x ))))

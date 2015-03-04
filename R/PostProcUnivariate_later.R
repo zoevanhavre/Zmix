@@ -39,7 +39,7 @@ PostProcUnivariate_later<-function( Grun,  mydata,LineUp=1,prep=10000,Propmin=0.
 		GrunK0$SteadyScore<-	Grun$SteadyScore[.iterK0]
 
 		## 2. unswitch
-		GrunK0us<-ZmixUnderConstruction::Zswitch_univ(GrunK0, LineUp,Propmin )
+		GrunK0us<-Zswitch_univ(GrunK0, LineUp,Propmin )
 		GrunK0us_FIN[[.K0]]<-GrunK0us
 
 # PLOTS density pars
