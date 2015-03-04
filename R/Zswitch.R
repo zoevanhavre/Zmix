@@ -78,7 +78,7 @@
 				.tbs<-table(Zref)
 				.tbs[.tbs>0]<-1
 				FinalOrderChoice	 <-order(.tbs*out_trim$Sig[wml,], decreasing=TRUE)
-				non0ref<-FinalOrderChoice[1: sum(.tbs)]  # not right
+				non0ref<-FinalOrderChoice[1: sum(.tbs)]  # not right?
 				refComp<-c(out_trim$P[wml,non0ref], out_trim$Mu[wml,non0ref], out_trim$Sig[wml,non0ref])
 				# FinalOrderChoice<-order(out_trim$Sig[wml,], decreasing=TRUE)		
 # 				non0ref<-FinalOrderChoice[1:sum(table(Zref)>0)]
@@ -137,9 +137,9 @@
 					 colnames(Candies)<-as.numeric(names(as.data.frame(CandiCells)))
 
 
-						MinusRefPars_catch<-function(x) 	{ flp<- Candies[x,]
-						if(length(unique(flp))<length(flp)) { Inf
-						} else {sum(abs( (refComp	-  c(out_trim$P[.iter,flp], out_trim$Mu[.iter,flp],out_trim$Sig[.iter,flp]))/refComp))	}}
+			MinusRefPars_catch<-function(x) 	{ flp<- Candies[x,]
+			if(length(unique(flp))<length(flp)) { Inf
+			} else {sum(abs( (refComp	-  c(out_trim$P[.iter,flp], out_trim$Mu[.iter,flp],out_trim$Sig[.iter,flp]))/refComp))	}}
 
 						BestOne<-which.min( sapply(1:dim(Candies)[1] , MinusRefPars_catch))  # find the best perm out of options
 						BestOne<-Candies[BestOne,]
