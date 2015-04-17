@@ -2,7 +2,7 @@ Package: Zmix
 Title: Overfitted Gaussian mixture models with an unknown number of components.
 Version: 0.1
 Authors@R: "Zoe van Havre <zoevanhavre@gmail.com>[aut, cre]"
-Description: What the package does (one paragraph)
+Description: Beta version, please bear with us as we iron out the functions. Do not hesitate to email for help.
 Depends:
     R (>= 3.1.0),
     ggplot2,
