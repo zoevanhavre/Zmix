@@ -8,9 +8,8 @@
 #' @examples
 #' #... you know...
 
-Zmix_univ_tempered<-function(y, k,iter=5000,  isSim=TRUE, alphas= c(30, 20, 10, 5, 3, 1, 0.5, 1/2^(c(2,3,4,5,6, 8, 10, 15, 20, 30)))){
+Zmix_univ_tempered<-function(y, k=10,iter=5000,  tau=1, isSim=FALSE, alphas= c(30, 20, 10, 5, 3, 1, 0.5, 1/2^(c(2,3,4,5,6, 8, 10, 15, 20, 30)))){
 					
-			#ifelse(isSim==TRUE, Y<-y$Y, Y<-y)
 				if(isSim==TRUE) {Y<-y$Y
 					}else{ Y<-y}
 				parallelAccept<-function(w1, w2, a1, a2){
@@ -24,34 +23,19 @@ Zmix_univ_tempered<-function(y, k,iter=5000,  isSim=TRUE, alphas= c(30, 20, 10, 
 						Ax<-sample(c(1,0), 1, prob=c(MH,1-MH))
 						return(Ax)}
 						
-				#trimit<-function(Out, nEnd){
-				#		yo<-length(Out$Bigmu)                                       #number of chains
-				#		nmax<-length(Out$Loglike)
-				#		mu<-Out$Bigmu[[yo]][c(nmax-nEnd+1):nmax,]    
-				#		sig<-Out$Bigsigma[[yo]][c(nmax-nEnd+1):nmax,]
-				#		ps<-Out$Bigp[[yo]][c(nmax-nEnd+1):nmax,]
-				#		Loglike<-Out$Loglike[c(nmax-nEnd+1):nmax]
-				#		zs<-Out$Zs[[yo]][,c(nmax-nEnd+1):nmax]
-				#		SteadyScore<-Out$SteadyScore$K0[c(nmax-nEnd+1):nmax]
-				#		return(list(Mu = mu,Sig=sig, Ps = ps, Loglike=Loglike, SteadyScore=SteadyScore, Zs=zs, YZ=Out$y))	
-					#	}
-		
-						
+					
 					nCh<-length(alphas)
 						TrackParallelTemp<-matrix(nrow=iter, ncol=nCh)
 						TrackParallelTemp[1,]<-c(1:nCh)
 					
 			
-					tau=1
+					#tau=1
 					n <-length(Y) 
-					a=2.5;b=2/var(Y)
+					a=2.5; b=2/var(Y)
 					d<-2
 					lambda=sum(Y)/n  
 			                                                                                                          # 1. set up priors
-					#mux<-list(mu=seq(from=min(Y), to=max(Y),length.out=k),sigma=rep(100, k),p=rep(1/k,k), k=k)
 					mux<-list(mu=seq(from=min(Y), to=max(Y),length.out=k),sigma=rep(1, k),p=rep(1/k,k), k=k)
-					
-
 					n <-length(Y) 
 					a=2.5; b<-0.5*var(Y);d<-2
 					lambda<-sum(Y)/n  ;
@@ -117,12 +101,7 @@ Zmix_univ_tempered<-function(y, k,iter=5000,  isSim=TRUE, alphas= c(30, 20, 10, 
 			                                                                                                          # 7 Generate Sigma's (and save)
 					
 					Bigsigma[[.ch]][j,]<- rinvgamma(k, a+(ns+1)/2,	b+0.5*tau*(Bigmu[[.ch]][j,]-lambda)^2+0.5*sv)
-			                                                                                                          ## MAP Estimators
-			                                                                                                          #if (.ch==nCh){
-			                                                                                                          #mapy[j,]<- prod(apply(Pzs[[.ch]], 2,sum))
-			                                                                                                          #mapmu<-prod(dnorm(Bigmu[[.ch]][j,], mean=lambda, sd=(Bigsigma[[.ch]][j,]/tau) ))
-			                                                                                                          #mapsig<- prod(dinvgamma(Bigsigma[[.ch]][j,], a,b))
-			                                                                                                          #map[j,]<-prod(mapy[j,], mapmu, mapsig)		}
+			                                                                                             
 					}
 					
 			                                                                                                          # Log Likelihood: # Sum-n (log Sum-K ( weights x dnorm (y,thetas))) 
@@ -144,9 +123,7 @@ Zmix_univ_tempered<-function(y, k,iter=5000,  isSim=TRUE, alphas= c(30, 20, 10, 
 					plot(SteadyScore$K0~SteadyScore$Iteration, main='#non-empty groups', type='l')
 					ts.plot(Bigp[[nCh]], main='Weights from target posterior', col=rainbow(k))
 					ts.plot(TrackParallelTemp[,c(nCh:1)], main='Track Parallel Tempering', col=rainbow(nCh))
-					#ts.plot(Bigmu[[nCh]], main='emptying Mu', col=rainbow(k))
-					#image(ZSaved[[nCh]][order(Y),], col=rainbow(K), main="Allocations")
-					Sys.sleep(0)}
+						Sys.sleep(0)}
 					
 					for (.ch in 1:nCh){
 			                                                                                                          #################
@@ -200,8 +177,15 @@ Zmix_univ_tempered<-function(y, k,iter=5000,  isSim=TRUE, alphas= c(30, 20, 10, 
 					if(j>20){
 					if( sample(c(1,0),1, 0.9)==1){		# FREQ OF TEMPERING! 
 			                                                                                                          #Pick chains, just chose one and the one next to it
-					Chain1<-sample( 1:(nCh-1), 1)   
-					Chain2<-Chain1+1
+      if( j%%2==0){chainset<- c(1:(nCh-1))[c(1:(nCh-1))%%2==0]   #evens
+      } else {chainset<- c(1:(nCh-1))[c(1:(nCh-1))%%2!=0] }   #odds
+
+ for( eachChain in 1:length(chainset)){
+                Chain1<-chainset[eachChain]  
+                Chain2<-Chain1+1
+         
+					#Chain1<-sample( 1:(nCh-1), 1)   
+					#Chain2<-Chain1+1
 			       ## allow non-adjacent chains
 					#Chain1<-sample( c(1:nCh), 1)   
 					#Chain2<-sample(c(1:nCh)[c(1:nCh)!=Chain1],1)
@@ -235,7 +219,7 @@ Zmix_univ_tempered<-function(y, k,iter=5000,  isSim=TRUE, alphas= c(30, 20, 10, 
 					ZSaved[[Chain1]][,j]<-.z2
 					ZSaved[[Chain2]][,j]<-.z1
 					}		}		}
-					
+					}
 			                                                                                                          #logLikelihood
 					for (i in 1:n){
 					non0id<-c(1:k)[ns > 0]
