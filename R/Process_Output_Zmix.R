@@ -1,4 +1,4 @@
-#' PostProcessing function univ
+#' Process the output of Zmix_univ_tempered
 #'
 #' This function draws samples from a Wishart dist
 #' @param v and s

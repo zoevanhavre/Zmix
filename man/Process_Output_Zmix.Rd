@@ -2,7 +2,7 @@
 % Please edit documentation in R/Process_Output_Zmix.R
 \name{Process_Output_Zmix}
 \alias{Process_Output_Zmix}
-\title{PostProcessing function univ}
+\title{Process the output of Zmix_univ_tempered}
 \usage{
 Process_Output_Zmix(Grun, isSim = FALSE, Burn = 2000, LineUp = 1,
   Pred_Reps = 100, Zswitch_Sensitivity = 0.01, makePlots = TRUE,

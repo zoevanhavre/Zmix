@@ -4,8 +4,9 @@
 \alias{Zmix_univ_tempered}
 \title{Run Gibbs sampler with prior tempering}
 \usage{
-Zmix_univ_tempered(y, k, iter = 5000, isSim = TRUE, alphas = c(30, 20, 10,
-  5, 3, 1, 0.5, 1/2^(c(2, 3, 4, 5, 6, 8, 10, 15, 20, 30))))
+Zmix_univ_tempered(y, k = 10, iter = 5000, tau = 1, isSim = FALSE,
+  alphas = c(30, 20, 10, 5, 3, 1, 0.5, 1/2^(c(2, 3, 4, 5, 6, 8, 10, 15, 20,
+  30))))
 }
 \arguments{
 \item{y,}{k,iter, isSim=TRUE, alphas=}
