@@ -4,11 +4,9 @@ Documentation in progress, please contact me for questions etc
 
 HOW TO USE
 
-`# install package`
-
-`library(devtools)`
-
-`library(roxygen2)`
+```# install package
+library(devtools)
+library(roxygen2)```
 
 `install_github('zoevanhavre/Zmix')`
 `library(Zmix)`
