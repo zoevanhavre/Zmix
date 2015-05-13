@@ -17,7 +17,20 @@ HOW TO USE
     set.seed(1)	
     run1 <- Zmix_univ_tempered(dat1,tau=1,iter=2000,k=10) # few iterations for fast example, in practice use more 
     pp_run1<-Process_Output_Zmix(run1,Pred_Reps=1000, Zswitch_Sensitivity=0.01, isSim=FALSE, Plot_Title="Sim 1 Example of Zmix", SaveFileName="Zmix_Run1", Burn=1000)
-
+    #Post Processing output is a  list of 
+    #1 final parameter estimates for all models
+    pp_run1[[1]]
+    #2  model fit values
+    pp_run1[[2]]
+    # 3 Posterior allocations (list over all models found)
+    head(pp_run1[[3]][[1]])
+    #head(pp_run1[[3]][[2]]) # When there is a second model, etc
+    # 4 Posterior Allocation probabilities for each observation  and each non-empty group (list over all models found)
+    head(pp_run1[[4]][[1]])
+    #head(pp_run1[[4]][[2]]) # When there is a second model, etc
+    #5 Unswitched parameters  (list over all models found)
+    head(pp_run1[[5]][[1]][[1]])  # Parameters
+    head(pp_run1[[5]][[1]][[2]])  # Allocations (Zs)
 
 *Galaxy Example*
 
