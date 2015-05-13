@@ -16,7 +16,7 @@ HOW TO USE
     dat1<-c(rnorm(20, mean=-1), rnorm(70, mean=4), rnorm(10, mean=10))
     set.seed(1)	
     run1 <- Zmix_univ_tempered(dat1,tau=1,iter=2000,k=10) # few iterations for fast example, in practice use more 
-    pp_run1<-Process_Output_Zmix(run1,Pred_Reps=1000, Zswitch_Sensitivity=0.01, isSim=FALSE, Plot_Title="dat1 with Tau=0.01", SaveFileName="Zmix_Run1", Burn=1000)
+    pp_run1<-Process_Output_Zmix(run1,Pred_Reps=1000, Zswitch_Sensitivity=0.01, isSim=FALSE, Plot_Title="Sim 1 Example of Zmix", SaveFileName="Zmix_Run1", Burn=1000)
 
 
 *Galaxy Example*
