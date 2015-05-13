@@ -123,7 +123,7 @@ ZTable[[.K0]]<-data.frame("myY"=NULL, "k"=NULL, "Prob"=NULL)
 			
 		GrunK0us$Pars$k<-as.numeric(as.character(GrunK0us$Pars$k))
 
-		Zetc<-ZmixUnderConstruction::Zagg(GrunK0us, Y)
+		Zetc<-Zagg(GrunK0us, Y)
 		p_vals$MAE[.K0]<- Zetc$MAE
 		p_vals$MSE[.K0]<- Zetc$MSE
 		postPredTests<-PostPredFunk( GrunK0us,Zetc, Y, Pred_Reps, Plot_Title)
