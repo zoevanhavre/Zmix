@@ -10,12 +10,12 @@
 
 Process_Output_Zmix<-function( Grun, isSim=FALSE,  Burn=2000, LineUp=1, Pred_Reps=100, Zswitch_Sensitivity=0.01, makePlots=TRUE, Plot_Title="Results", SaveFileName="zmix", PlotType="Boxplot"){
 		mydata<-Grun$YZ
-		require(wq)
+		#require(wq)
 		Grun<-trimit(Out=Grun, Burn)
 		ifelse(isSim==TRUE, Y<-mydata$Y,  Y<-mydata)
 
-		n<-length(Y)  
-		K<-dim(Grun$Ps)[2]	
+		n<-length(Y)
+		K<-dim(Grun$Ps)[2]
 	minq4PLOT<-0.01
     	both<-cbind(melt(Grun$Mu)[,3], log(melt(Grun$Sig)[,3]^2))
     	Weights<-melt(Grun$Ps)[,3]
@@ -30,7 +30,7 @@ Lab.palette <- colorRampPalette(rainbow(K*3, alpha=.3), space = "Lab")
 if(makePlots==TRUE){
 pdf(file=paste(SaveFileName, "_MCMCpp.pdf",sep='') ,width=8, height=3)
 	par(mfrow=c(1, 3))
-	barplot(slices, ylim=c(0,1), main="Number of non-empty states", xlab="Number of non-empty states", ylab="Probability (from MCMC)") 
+	barplot(slices, ylim=c(0,1), main="Number of non-empty states", xlab="Number of non-empty states", ylab="Probability (from MCMC)")
 	abline(h=seq(0, 1, .05), lwd=0.5, col='LightGrey')
 	smoothScatter(both, colramp = Lab.palette, main="Posterior Surface", nrpoints = 0, xlab="Mean", ylab="LOG(Variance)")
 	plot(both, col=trancol, xlim=minmaxMEANS, ylim=c(0,100), xlab="Mean", ylab="Variance", bg='grey', main=paste("Posterior Samples:" ,"\n Transparency By Weight"))
@@ -45,7 +45,7 @@ dev.off()
 		# SAVE table of tests, parameter estimates and clustering (Z's)
 		 p_vals<-data.frame("K0"=K0, "Probability"=as.numeric(table(Grun$SteadyScore))/dim(Grun$Ps)[1],
 			"MAE"=NA, "MSE"=NA,"Pmin"=NA, "Pmax"=NA, "Concordance"=NA, "MAPE"=NA, "MSPE"=NA)
-						
+
 		K0estimates<-vector("list", length(K0))
 		Zestimates<-vector("list", length(K0))
 		GrunK0us_FIN<-vector("list", length(K0))
@@ -107,7 +107,7 @@ ZTable[[.K0]]<-data.frame("myY"=NULL, "k"=NULL, "Prob"=NULL)
 			names(grrTable)<-c("myY", "k", "Prob")
 				grrTable$k<-as.factor(grrTable$k)
 
-			gp<-ggplot(grrTable, aes(x=myY, y=k, fill=Prob)) + geom_tile()+ggtitle(  "Posterior allocations")+ 
+			gp<-ggplot(grrTable, aes(x=myY, y=k, fill=Prob)) + geom_tile()+ggtitle(  "Posterior allocations")+
 			xlab("index of ordered y")+
 			scale_fill_gradientn(colours = c("#ffffcc","#a1dab4","#41b6c4","#2c7fb8","#253494" ))+theme_bw()+theme(legend.position='right')
 			#ggsave( plot=gp,  filename=paste( "Allocations_", plotfilename ,"K_",maxK, ".pdf",sep="") )
@@ -115,12 +115,12 @@ ZTable[[.K0]]<-data.frame("myY"=NULL, "k"=NULL, "Prob"=NULL)
 			}
 
 		if(makePlots==TRUE){ p4<-ggAllocationPlot(GrunK0us$Zs, Y )}
-		
+
 		maxZ<-function (x)  as.numeric(names(which.max(table( x ))))
 		    Zhat<- factor( apply(t(GrunK0us$Zs), 2,maxZ))
 		  Zestimates[[.K0]]<-Zhat
-			## 3. , MSE	
-			
+			## 3. , MSE
+
 		GrunK0us$Pars$k<-as.numeric(as.character(GrunK0us$Pars$k))
 
 		Zetc<-Zagg(GrunK0us, Y)
@@ -132,7 +132,7 @@ ZTable[[.K0]]<-data.frame("myY"=NULL, "k"=NULL, "Prob"=NULL)
 		p_vals$Pmax[.K0]<-postPredTests$MaxP
 		p_vals$MAPE[.K0]<-postPredTests$MAPE
 		p_vals$MSPE[.K0]<-postPredTests$MSPE
-		p_vals$Concordance[.K0]<-1-postPredTests$Concordance	
+		p_vals$Concordance[.K0]<-1-postPredTests$Concordance
 
 		p5<-postPredTests$ggp
 
@@ -145,12 +145,12 @@ ZTable[[.K0]]<-data.frame("myY"=NULL, "k"=NULL, "Prob"=NULL)
 		K0estimates[[.K0]]<-cbind(thetaCI, "K0"=K0[.K0])
 if(makePlots==TRUE){
 if(K0[.K0]>1){
-		
+
 		pdf( file= paste("PPplots_", SaveFileName ,"K_", K0[.K0] ,".pdf", sep=""), width=10, height=5)
- 		print( wq::layOut(	list(p1, 	1, 1:2),  
-	        	list(p2, 	1, 3:4),   
+ 		print( layOut(	list(p1, 	1, 1:2),
+	        	list(p2, 	1, 3:4),
 	         	list(p3,	1,5:6),
-	         	list(p4, 	2,1:3),  
+	         	list(p4, 	2,1:3),
 	          	list(p5, 	2,4:6)))
 		dev.off()
 		}}
