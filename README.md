@@ -1,8 +1,9 @@
-# Zmix
+# Zmix (BETA)
 ##R package for overfitting Bayesian mixture models with an unknown number of components.
-###Documentation in progress, please contact me for questions etc 
 
-HOW TO USE
+### Before use: currently updating documentation etc, please contact me for info / questions :)  
+
+The code below is an example of a typical analysis:
 
 *Install package:*
 
