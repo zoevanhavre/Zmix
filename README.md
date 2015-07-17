@@ -1,5 +1,10 @@
 # Zmix (BETA)
 ##R package for overfitting Bayesian mixture models with an unknown number of components.
+Link to paper: http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0131739
+
+Please cite: **van Havre Z, White N, Rousseau J, Mengersen K (2015) Overfitting Bayesian Mixture Models with an Unknown Number of Components. PLoS ONE 10(7): e0131739. doi: 10.1371/journal.pone.0131739**
+
+
 
 ### Before use: currently updating documentation etc, please contact me for info / questions :)  
 
