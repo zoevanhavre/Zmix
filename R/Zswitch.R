@@ -79,7 +79,7 @@
 				.all<-c(1:K)
 				.tbs<-table(Zref)
 				non0ref<- .all[.tbs>0]
-				non0ref<-non0ref[order(out_trim$Mu[wml, .tbs>0], decreasing=TRUE)]
+				non0ref<-non0ref[order(out_trim$Mu[wml, .tbs>0], decreasing=FALSE)]
 				refComp<-c(out_trim$P[wml,non0ref], out_trim$Mu[wml,non0ref], out_trim$Sig[wml,non0ref])
 
 			#non0ref<-FinalOrderChoice[1: sum(.tbs)]  
