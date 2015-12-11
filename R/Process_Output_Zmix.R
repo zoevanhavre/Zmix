@@ -153,6 +153,13 @@ if(K0[.K0]>1){
 	         	list(p4, 	2,1:3),
 	          	list(p5, 	2,4:6)))
 		dev.off()
+		png( file= paste("PPplots_", SaveFileName ,"K_", K0[.K0] ,".png", sep=""),width = 480, height = 240)
+ 		print( layOut(	list(p1, 	1, 1:2),
+	        	list(p2, 	1, 3:4),
+	         	list(p3,	1,5:6),
+	         	list(p4, 	2,1:3),
+	          	list(p5, 	2,4:6)))
+		dev.off()
 		}}
 
 		}}
