@@ -1,15 +1,14 @@
 
-#' Run Gibbs sampler with prior tempering
+#' Run Gibbs sampler with prior tempering for univariate gaussian mixture models
 #'
 #' This function ...
-#' @param y, k,iter, isSim=TRUE, alphas=
-#' @keywords Gibbs sampler, univariate, normal, gaussian, mixture, parallel tempering, order estimation
+#' @param y, k,iter, isSim=FALSE, alphas
+#' @keywords Gibbs sampler, univariate, normal, gaussian, mixture, prior parallel tempering.
 #' @export
 #' @examples
-#' #... you know...
+#' # Coming zoon
 
-Zmix_univ_tempered<-function(y, k=10,iter=5000,  tau=1, isSim=FALSE, alphas= c(30, 20, 10, 5, 3, 1, 0.5, 1/2^(c(2,3,4,5,6, 8, 10, 15, 20, 30)))){
-
+Zmix_univ_tempered<-function(y, k=10,iter=5000,  tau=0.01, isSim=FALSE, alphas= c(30, 20, 10, 5, 3, 1, 0.5, 1/2^(c(2,3,4,5,6, 8, 10, 15, 20, 30)))){
 				if(isSim==TRUE) {Y<-y$Y
 					}else{ Y<-y}
 				parallelAccept<-function(w1, w2, a1, a2){
