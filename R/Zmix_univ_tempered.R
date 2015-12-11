@@ -115,14 +115,14 @@ Zmix_univ_tempered<-function(y, k=10,iter=5000,  tau=0.01, isSim=FALSE, alphas= 
 					for (j in 2:iter){
 
 
+					 if(j %% 100==0){
 					Sys.sleep(0.01)
 					setTxtProgressBar(pb, j)
-					# if(j %% 10==0){
 					# par(mfrow=c(1,3))
 					# plot(SteadyScore$K0~SteadyScore$Iteration, main='#non-empty groups', type='l')
 					# ts.plot(Bigp[[nCh]], main='Weights from target posterior', col=rainbow(k))
 					# ts.plot(TrackParallelTemp[,c(nCh:1)], main='Track Parallel Tempering', col=rainbow(nCh))
-					# 	Sys.sleep(0)}
+					 	Sys.sleep(0)}
 
 					for (.ch in 1:nCh){
 			                                                                                                          #################
