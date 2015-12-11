@@ -2,29 +2,28 @@
 % Please edit documentation in R/Zmix_univ_tempered.R
 \name{Zmix_univ_tempered}
 \alias{Zmix_univ_tempered}
-\title{Run Gibbs sampler with prior tempering}
+\title{Run Gibbs sampler with prior tempering for univariate gaussian mixture models}
 \usage{
-Zmix_univ_tempered(y, k = 10, iter = 5000, tau = 1, isSim = FALSE,
+Zmix_univ_tempered(y, k = 10, iter = 5000, tau = 0.01, isSim = FALSE,
   alphas = c(30, 20, 10, 5, 3, 1, 0.5, 1/2^(c(2, 3, 4, 5, 6, 8, 10, 15, 20,
   30))))
 }
 \arguments{
-\item{y,}{k,iter, isSim=TRUE, alphas=}
+\item{y,}{k,iter, isSim=FALSE, alphas}
 }
 \description{
 This function ...
 }
 \examples{
-#... you know...
+# Coming zoon
 }
 \keyword{Gibbs}
-\keyword{estimation}
 \keyword{gaussian,}
 \keyword{mixture,}
 \keyword{normal,}
-\keyword{order}
 \keyword{parallel}
+\keyword{prior}
 \keyword{sampler,}
-\keyword{tempering,}
+\keyword{tempering.}
 \keyword{univariate,}
 
