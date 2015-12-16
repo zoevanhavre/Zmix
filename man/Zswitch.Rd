@@ -51,7 +51,7 @@ set.seed(88); library(ggplot2)
 	K0<-as.numeric(names(table(run1$SteadyScore))) # check out number of non-empty groups in iterations, if available
 
  # Undo the LABEL SWITCHING
-	runUS<-QuickSwitch_allPars(run1, LineUpBy=1,PropMin=0.1 )
+	runUS<-Zswitch(run1, LineUpBy=1,PropMin=0.1 )
 
  # Check out results
 	p1<-ggplot(data=runUS$Pars, aes(x=Iteration, y=P, group=factor(k), colour=factor(k))) + geom_line() + geom_point()+ggtitle("Unswitched Weights")

@@ -1,0 +1,82 @@
+ls()
+window
+ls()
+getwd()
+load('~/Google Drive/Work/CSIRO_P1/PP_Y4.RDATA')
+ls()
+Y4_AD_pp[[1]]
+Y4_AD_pp[[2]]
+load('~/Google Drive/Work/CSIRO_P1/PP_Y37.RDATA')
+ls()
+names(Y37_AD_pp)
+Y4_AD_pp[[3]]
+Y4_AD_pp[[4]]
+load('~/Google Drive/Work/CSIRO_P1/Results_Run_Singles/Zmix_zmixTEST.RDATA')
+ls()
+?write.csv
+load('~/Google Drive/Work/CSIRO_P1/Results_Run_Singles/Zmix_ZMIX_testingVentrolateral.Prefrontal.RDATA')
+ls()
+load('~/Google Drive/Work/CSIRO_P1/Results_Run_Singles/Zmix_ZMIX_ALLAnterior.Cingulate.RDATA')#
+load('~/Google Drive/Work/CSIRO_P1/Results_Run_Singles/Zmix_ZMIX_ALLInsula.RDATA')#
+load('~/Google Drive/Work/CSIRO_P1/Results_Run_Singles/Zmix_ZMIX_ALLLateral.Occipital.RDATA')#
+load('~/Google Drive/Work/CSIRO_P1/Results_Run_Singles/Zmix_ZMIX_ALLOrbito.Frontal.RDATA')#
+load('~/Google Drive/Work/CSIRO_P1/Results_Run_Singles/Zmix_ZMIX_ALLPosterior.Cingulate.RDATA')#
+load('~/Google Drive/Work/CSIRO_P1/Results_Run_Singles/Zmix_ZMIX_ALLPrimary.Visual.Cortex.RDATA')#
+load('~/Google Drive/Work/CSIRO_P1/Results_Run_Singles/Zmix_ZMIX_ALLSensoryMotor.RDATA')#
+load('~/Google Drive/Work/CSIRO_P1/Results_Run_Singles/Zmix_ZMIX_ALLSuperior.Parietal.RDATA')#
+load('~/Google Drive/Work/CSIRO_P1/Results_Run_Singles/Zmix_ZMIX_ALLSupramarginal.Gyrus.RDATA')#
+load('~/Google Drive/Work/CSIRO_P1/Results_Run_Singles/Zmix_ZMIX_ALLVentrolateral.Prefrontal.RDATA')
+33/10
+33/3
+load('~/Google Drive/Work/CSIRO_P1/Results_Run_Singles/Zmix_ZMIX_ALLOrbito.Frontal.RDATA')#
+    .thisModel<-which.max(Final_Result[[2]]$Probability)#
+    .thisK0<-Final_Result[[2]]$K0[.thisModel]
+load('~/Google Drive/Work/CSIRO_P1/Results_Run_Singles/Zmix_ZMIX_ALLOrbito.Frontal.RDATA')
+ls()
+load('~/Google Drive/Work/CSIRO_P1/Results_Run_Singles/Zmix_ZMIX_ALLOrbito.Frontal.RDATA')
+load('~/Google Drive/Work/CSIRO_P1/Code/Combine_Result.K02.midpoints.RDATA')
+ls()
+Combine_Result.K02.midpoints
+Combine_Result.K02.midpoints[order(Combine_Result.K02.midpoints$MidPoint)]
+Combine_Result.K02.midpoints[order(Combine_Result.K02.midpoints$MidPoint),]
+Alz_TopModel<-Alz_TopModel_REV
+# compute prop k=1 vs others by region
+Alz_TopModel<-cbind(Alz_TopModel,"k_hilo"=Alz_TopModel$k )
+load('~/Google Drive/Work/CSIRO_P1/Results_Run_Singles/Zmix_ZMIX_ALLFusiform.RDATA')
+ls()
+Final_Result[[1]]
+Final_Result[[2]]
+ls()
+yo
+library("Zmix")
+dim(iris)
+names(iris)
+?knitr::knit
+?opts_knit$set
+opts_knit
+?opts_knit
+opts_knit$set opts_knit$get("verbose")
+opts_knit$get("verbose")
+library(knitr)
+opts_knit$get("verbose")
+Alz_TopModel_mu_COPY<-Alz_TopModel_mu
+levels(bit1$k_hilo)<-"HC_high"
+Alz_TopModel_mu_COPY<-Alz_TopModel_mu#
+bit1<-droplevels(Alz_TopModel_mu_COPY[Alz_TopModel_mu_COPY$Model_K0 %in% 1, ])#
+levels(bit1$k_hilo)<-"HC_high"#
+bit2<-Alz_TopModel_mu_COPY[Alz_TopModel_mu_COPY$Model_K0 %in% 2, ]#
+Alz_TopModel_mu_COPY<-rbind(bit1, bit2)
+setwd("/Users/van42c/Google Drive/Work/GitHub/Zmix/R")
+setwd("..")
+library(devtools)#
+library(roxygen2)
+document()
+document()
+document()
+document()
+?png
+document()
+document()
+document()
+document()
+document()

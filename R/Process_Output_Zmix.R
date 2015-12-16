@@ -146,6 +146,12 @@ ZTable[[.K0]]<-data.frame("myY"=NULL, "k"=NULL, "Prob"=NULL)
 if(makePlots==TRUE){
 if(K0[.K0]>1){
 
+		Sys.sleep(1)
+		print( layOut(	list(p1, 	1, 1:2),
+	        	list(p2, 	1, 3:4),
+	         	list(p3,	1,5:6),
+	         	list(p4, 	2,1:3),
+	          	list(p5, 	2,4:6)))
 		pdf( file= paste("PPplots_", SaveFileName ,"K_", K0[.K0] ,".pdf", sep=""), width=10, height=5)
  		print( layOut(	list(p1, 	1, 1:2),
 	        	list(p2, 	1, 3:4),
