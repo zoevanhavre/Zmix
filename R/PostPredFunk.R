@@ -1,8 +1,8 @@
-#' PostProcessing Predictive function
+#' PostProcessing: Predictive function. Used in main Post-processing function
 #'
-#' This function draws samples from a Wishart dist
-#' @param v and s
-#' @keywords Wishart
+#' This function generates new datasets from MCMC output of ZMIX. 
+#' @param .GrunK0us, Unswitched MCMC output for one _K0
+#' @keywords Predictive, PostProcessing
 #' @export
 #' @examples
 #' #nope
