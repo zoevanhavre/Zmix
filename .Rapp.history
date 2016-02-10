@@ -67,16 +67,12 @@ levels(bit1$k_hilo)<-"HC_high"#
 bit2<-Alz_TopModel_mu_COPY[Alz_TopModel_mu_COPY$Model_K0 %in% 2, ]#
 Alz_TopModel_mu_COPY<-rbind(bit1, bit2)
 setwd("/Users/van42c/Google Drive/Work/GitHub/Zmix/R")
+setwd(..)
+setwd(...)
 setwd("..")
-library(devtools)#
+library(devtools)
+library(roxygen)
 library(roxygen2)
-document()
-document()
-document()
-document()
-?png
-document()
-document()
 document()
 document()
 document()
