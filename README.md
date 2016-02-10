@@ -1,49 +1,86 @@
-# Zmix (BETA)
-##R package for overfitting Bayesian mixture models with an unknown number of components.
-Link to paper: http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0131739
+Install Zmix
+============
 
-Please cite: **van Havre Z, White N, Rousseau J, Mengersen K (2015) Overfitting Bayesian Mixture Models with an Unknown Number of Components. PLoS ONE 10(7): e0131739. doi: 10.1371/journal.pone.0131739**
+To install the latest version of the Zmix package from github
 
+Simple Example
+==============
 
+Let's generate some data from a mixture of three Gaussian components. Using the Zmix function provided, a Gaussian mixture can be simulated from given the model parameters \(\mu_k\), \(\sigma_k\), and mixture weights \(\pi_k\) for \(k=1,\dots, K\):
 
-### Before use: currently updating documentation etc, please contact me for info / questions :)  
+``` r
+simone<-simudZ(n=100,
+               mu=c(-1,4,10),
+               sig=c(1,1,2),
+               p=c(.2, .7, .1),
+               k=3)
+#the output includes both the simulated data,
+# and each observation's allocation as "Z".
+lapply(simone, head)
+```
 
-The code below is an example of a typical analysis:
+    ## $Y
+    ## [1]  3.526882  4.880605 -1.989098  3.404140  2.320297 -1.410440
+    ## 
+    ## $Z
+    ## [1] 2 2 1 2 2 1
 
-*Install package:*
+![](Zmix_RunThrough_files/figure-markdown_github/unnamed-chunk-4-1.png)<!-- -->
 
-    library(devtools)
-    library(roxygen2)
-    install_github('zoevanhavre/Zmix')
-    library(Zmix)
-    # NOTE: please move to a personal directory at this point as plots are created automatically with the Process_Output_Zmix function.
-    # setwd("FOLDERPATH_FOR_OUTPUT")
-    set.seed(1)	
-    dat1<-c(rnorm(20, mean=-1), rnorm(70, mean=4), rnorm(10, mean=10))
-    set.seed(1)	
-    run1 <- Zmix_univ_tempered(dat1,tau=1,iter=2000,k=10) # few iterations for fast example, in practice use more 
-    pp_run1<-Process_Output_Zmix(run1,Pred_Reps=1000, Zswitch_Sensitivity=0.01, isSim=FALSE, Plot_Title="Sim 1 Example of Zmix", SaveFileName="Zmix_Run1", Burn=1000)
-    #Post Processing output is a  list of 
-    #1 final parameter estimates for all models
-    pp_run1[[1]]
-    #2  model fit values
-    pp_run1[[2]]
-    # 3 Posterior allocations (list over all models found)
-    head(pp_run1[[3]][[1]])
-    #head(pp_run1[[3]][[2]]) # When there is a second model, etc
-    # 4 Posterior Allocation probabilities for each observation  and each non-empty group (list over all models found)
-    head(pp_run1[[4]][[1]])
-    #head(pp_run1[[4]][[2]]) # When there is a second model, etc
-    #5 Unswitched parameters  (list over all models found)
-    head(pp_run1[[5]][[1]][[1]])  # Parameters
-    head(pp_run1[[5]][[1]][[2]])  # Allocations (Zs)
+Let's run Zmix, fitting 10 components to these data.
 
-*Galaxy Example*
+``` r
+run1 <- Zmix_univ_tempered(simone$Y,iter=500,k=10) 
+```
 
-    set.seed(1)
-    runGalaxy1 <- Zmix_univ_tempered(Galaxy , tau=1, iter=2000,k=10)
-    g1<-Process_Output_Zmix(runGalaxy1,LineUp=1, Pred_Reps=1000,Zswitch_Sensitivity=0.01, isSim=FALSE, Plot_Title="Galaxy, tau=1", SaveFileName="Zmix_Galaxy_tau1", Burn=1000)
-    # increase prior variance of mean: 
-    run1_t01 <- Zmix_univ_tempered(dat1,  tau=0.01, iter=2000,k=10)
-    pp_run1_t01<-Process_Output_Zmix(run1_t01,  Pred_Reps=1000, Zswitch_Sensitivity=0.01, isSim=FALSE, Plot_Title="dat1 with Tau=0.01", SaveFileName="Run1_tau01", Burn=1000)
+    ## 
+      |                                                                       
+      |                                                                 |   0%
+      |                                                                       
+      |=============                                                    |  20%
+      |                                                                       
+      |==========================                                       |  40%
+      |                                                                       
+      |=======================================                          |  60%
+      |                                                                       
+      |====================================================             |  80%
+      |                                                                       
+      |=================================================================| 100%
 
+![](Zmix_RunThrough_files/figure-markdown_github/unnamed-chunk-5-1.png)<!-- --> Post processing: main function
+
+``` r
+pp_run1<-Process_Output_Zmix(run1,Pred_Reps=200, Zswitch_Sensitivity=0.01, isSim=FALSE, Plot_Title="Simone", SaveFileName="Zmix_Run1", Burn=200)
+```
+
+    ## NULL
+    ##   K0 Probability      MAE      MSE Pmin Pmax Concordance     MAPE     MSPE
+    ## 1  3           1 83.86598 113.2284 0.12 0.84     0.94425 96.54466 149.0588
+
+### Result Tables:
+
+``` r
+pp_run1[[1]]
+```
+
+    ##   variable factor(k)              value K0
+    ## 1        P         1    0.69(0.57,0.79)  3
+    ## 2       Mu         1    3.98(3.68,4.25)  3
+    ## 3      Sig         1     1.09(0.76,1.6)  3
+    ## 4        P         2    0.18(0.11,0.26)  3
+    ## 5       Mu         2 -1.24(-2.04,-0.51)  3
+    ## 6      Sig         2    1.94(0.92,4.03)  3
+    ## 7        P         3    0.14(0.07,0.23)  3
+    ## 8       Mu         3   9.49(8.06,10.77)  3
+    ## 9      Sig         3    2.38(0.86,6.73)  3
+
+``` r
+pp_run1[[2]]
+```
+
+    ##   K0 Probability      MAE      MSE Pmin Pmax Concordance     MAPE     MSPE
+    ## 1  3           1 83.86598 113.2284 0.12 0.84     0.94425 96.54466 149.0588
+
+The plots this makes can be found in the working directory. This includes: ![alt text](Zmix_Run1_MCMCpp.png "Logo Title Text 1")
+
+![alt text](PPplots_Zmix_Run1K_3.png "Logo Title Text 1")
