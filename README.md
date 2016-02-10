@@ -3,6 +3,14 @@ Install Zmix
 
 To install the latest version of the Zmix package from github
 
+
+```{r}
+library(roxygen2)
+library(devtools)
+install_github('zoevanhavre/Zmix')
+library(Zmix)
+```
+
 Simple Example
 ==============
 
