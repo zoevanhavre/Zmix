@@ -1,9 +1,7 @@
  #' A dDirichlet Function
 #'
 #' density of dirichlet
-#' @param x, Input parameter
-#' @param alpha, Hyper-prior
-#' @param log=False,  use log?
+#' @param x, alpha, log=False
 #' @keywords dirichlet
 #' @export
 #' @examples dDirichlet(c(.1, .9), c(0.1,0.1))

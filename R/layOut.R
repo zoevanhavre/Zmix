@@ -1,11 +1,11 @@
-#' Utility for plotting multiple plots in one frame
+#' PostProcessing Predictive function
 #'
 #' This function draws samples from a Wishart dist
-#' @param inputs, NA
-#' @keywords  plots
+#' @param v and s
+#' @keywords Wishart
 #' @export
 #' @examples
-#' #used inside functions
+#' #nope
 
 layOut<-function (...) {
 require(grid)

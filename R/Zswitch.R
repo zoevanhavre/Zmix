@@ -66,9 +66,11 @@
 			
 			# Pick Reference = Max log Likelihood
 			wml<-which.max(out_trim$Loglike)
+#wml<-length(out_trim$Loglike)
 			Zref<-factor(out_trim$Zs[,	wml], levels=1:K,ordered=FALSE) 
 			if (LineUpBy==1){	
 				FinalOrderChoice<-order(out_trim$Ps[wml,], decreasing=TRUE)		
+			#	refPar<-out_trim$Ps[wml,FinalOrderChoice]##***##
 				# comparing pars:
 				non0ref<-FinalOrderChoice[1:sum(table(Zref)>0)]
 				refComp<-c(out_trim$P[wml,non0ref], out_trim$Mu[wml,non0ref], out_trim$Sig[wml,non0ref])
@@ -80,17 +82,27 @@
 				non0ref<-non0ref[order(out_trim$Mu[wml, .tbs>0], decreasing=FALSE)]
 				refComp<-c(out_trim$P[wml,non0ref], out_trim$Mu[wml,non0ref], out_trim$Sig[wml,non0ref])
 
+			#non0ref<-FinalOrderChoice[1: sum(.tbs)]  
+			#refComp<-c(out_trim$P[wml,non0ref], out_trim$Mu[wml,non0ref], out_trim$Sig[wml,non0ref])
+
 			}else if(LineUpBy==3){	
 				.tbs<-table(Zref)
 				.tbs[.tbs>0]<-1
 				FinalOrderChoice <-order(.tbs*out_trim$Sig[wml,], decreasing=FALSE)
 				non0ref<-FinalOrderChoice[1: sum(.tbs)]  
 				refComp<-c(out_trim$P[wml,non0ref], out_trim$Mu[wml,non0ref], out_trim$Sig[wml,non0ref])
+				# FinalOrderChoice<-order(out_trim$Sig[wml,], decreasing=TRUE)		
+# 				non0ref<-FinalOrderChoice[1:sum(table(Zref)>0)]
+# 				refComp<-c(out_trim$P[wml,non0ref], out_trim$Mu[wml,non0ref], out_trim$Sig[wml,non0ref])
 }
+			#levels(Zref)<-FinalOrderChoice
+# NEW
 			Zref<-factor(Zref)
 			levels(Zref)<- c(1:K)[order(non0ref)]
+			#levels(Zref)<- c(1:K)[order(FinalOrderChoice)]
 			Zref<- factor(Zref, levels=levels(Zref)[order(levels(Zref))])
-
+			
+				#
 			# storage dataframes:
 			AllPars<-data.frame('Iteration'=NA, 'k'=NA, 'Ps'=NA, 'Mu'=NA, 'Sig'=NA)[numeric(0), ]
 			Zfixed<-matrix(data=NA, nrow=dim(out_trim$Zs)[1], ncol=dim(out_trim$Zs)[2])
@@ -99,7 +111,9 @@
 
 
 			#for each iteration
-			for(.iter in 1:dim(out_trim$Zs)[2]){				
+			for(.iter in 1:dim(out_trim$Zs)[2]){
+		#	for(.iter in 1:74){
+				
 				#Store current states
 				Znow<-factor(out_trim$Zs[,.iter])    
 				
@@ -123,18 +137,27 @@
 				}
 
 				namesCandies<-names(Candies)
-		
+				# Catch if no appropriate seperation available at all, check all permutations. Only occurs in really bad models with bad convergence.	
+				#if(class(Candies)=='numeric'){ if( unique(Candies)<length(row.names(CandiCells))) { 
+				# Candies<- permutations(K)}  }
+
 		if(class(Candies)=='data.frame' | class(Candies)=='matrix'){
 		if  ( max(sapply(apply(Candies, 1, unique), length))<length(row.names(CandiCells))){
 		NumEmptyK<-length(non0ref)
+		#Candies<-matrix(as.numeric(names(Candies)[permutations(NumEmptyK)]), ncol=NumEmptyK, byrow='TRUE')
+	#	Candies<-matrix(c(1[permutations(NumEmptyK)]), ncol=NumEmptyK, byrow='TRUE')
 		Candies<-matrix(as.numeric(colnames(CandiCells)[permutations(NumEmptyK)]), ncol=NumEmptyK, byrow='TRUE')
 				colnames(Candies)<- rownames(CandiCells)
+
+		#	Candies<- permutations(K)
 		}
 		}else{
 		if  (length(unique(Candies))<length(row.names(CandiCells))){
 		NumEmptyK<-length(non0ref)
 		Candies<-matrix(as.numeric(colnames(CandiCells)[permutations(NumEmptyK)]), ncol=NumEmptyK, byrow='TRUE')
 		colnames(Candies)<- rownames(CandiCells)
+
+		#Candies<- permutations(K)}
 		} }
 
 	MinusRefPars<-function(x) 	{ 
@@ -142,6 +165,10 @@
 		if(length(unique(flp))<length(flp)) { Inf
 		} else {sum(abs( (refComp	-  c(out_trim$P[.iter,flp], out_trim$Mu[.iter,flp],out_trim$Sig[.iter,flp]))/refComp))	}}
 									
+#	if( sum( apply(CandiCells, 1, sum)) >  dim(CandiCells)[1] ){
+#	if( dim(Candies)[1]>1){
+#	if( dim(matrix(Candies, byrow=TRUE, ncol=NumEmptyK))[1]>1){
+#	if( sum(apply(CandiCells, 2, function(x) sum(x=="TRUE"))) >  dim(CandiCells)[1]){
 if(sum(apply(CandiCells, 2, function(x) sum(x=="TRUE")==1)) != dim(CandiCells)[1]){
 					BestOne<-which.min( sapply(1:dim(Candies)[1] , MinusRefPars))  # find the best perm out of options
 					BestOne<-Candies[BestOne,]
@@ -153,20 +180,15 @@ if(sum(apply(CandiCells, 2, function(x) sum(x=="TRUE")==1)) != dim(CandiCells)[1
 				levels(Znew)<-as.numeric(BestOne)
 				Zfixed[,.iter]<-as.numeric(as.character(Znew))
 				# Parameters
-				combinePars<-cbind(
-					.iter,
-					as.numeric(BestOne), 
-					out_trim$Ps[.iter,as.numeric(names(BestOne))],
-					out_trim$Mu[.iter,as.numeric(names(BestOne))], 
-					out_trim$Sig[.iter,as.numeric(names(BestOne))]
-					)[order(as.numeric(BestOne), decreasing=FALSE),]
+				combinePars<-cbind(.iter,as.numeric(BestOne),  out_trim$Ps[.iter,as.numeric(names(BestOne))],out_trim$Mu[.iter,as.numeric(names(BestOne))], out_trim$Sig[.iter,as.numeric(names(BestOne))] )[order(as.numeric(BestOne), decreasing=FALSE),]
 				AllPars<-rbind(AllPars, combinePars)
 				}
 			names(AllPars)<-c('Iteration', 'k', 'P', 'Mu','Sig')
 			
-			# summarise Zs : find max
+			# sumarise Zs (find max)
+			maxZ<-function (x)  as.numeric(names(which.max(table( x ))))
 			Zhat<- factor( apply(t(Zfixed), 2,maxZ))
-			levels(Zhat)<-as.character(BestOne)
+			 levels(Zhat)<-as.character(BestOne)
 			return(list('Pars'=AllPars, 'Zs'=Zfixed))
 			}
 		

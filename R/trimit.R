@@ -1,12 +1,11 @@
 #' trim univariate gibbs output
 #'
-#' This function is part of post processing function
-#' @param Out: Output of Zmix
-#' @param nEnd: How many iterations to KEEP? (i.e. end size)
-#' @keywords trim, mcmc	
+#' This function draws samples from a Wishart dist
+#' @param stuff
+#' @keywords stuff
 #' @export
 #' @examples
-#' #NA
+#' #nope
 
 
 trimit<-function(Out=Out, nEnd=EndSize){
