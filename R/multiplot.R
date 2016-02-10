@@ -1,12 +1,10 @@
- 
-#' Create multiplot ggplot2 
+#' Multiplot function and ggplot2 
 #'
-#' This function ....
-#' @param plots and rest
+#' @param plotlist=NULL, file, cols=1 
 #' @keywords ggplot
 #' @export
 #' @examples
-#' # not run
+#' # used inside other functions
 
 
 multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
