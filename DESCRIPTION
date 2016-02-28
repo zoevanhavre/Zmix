@@ -10,7 +10,6 @@ Depends:
     reshape2,
     gridExtra,
     mvtnorm,
-    MCMCpack,
     grid,
     DIRECT,
     gtools
