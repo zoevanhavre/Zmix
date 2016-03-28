@@ -34,9 +34,16 @@ Zmix_main<-function(
         WkZ<-	    replicate(k, list(0))	#storage for within group variability
         ybar<-	  replicate(k, list(0))
         for (.i in 1:k){
-          .Ysplit[[.i]]<-y[ZZ==.i,]
+        if(r>1){  .Ysplit[[.i]]<-y[ZZ==.i,]
+        }else{ .Ysplit[[.i]]<-y[ZZ==.i]}
+
           if (ns[.i]>1){					# for groups with >1 obsevations
-            ybar[[.i]]<- as.matrix(t(apply(.Ysplit[[.i]], 2, mean) ))
+            if(r>1){
+              ybar[[.i]]<- as.matrix(t(apply(.Ysplit[[.i]], 2, mean) ))  # UPDATE FOR UNIV
+            } else {
+            #  ybar[[.i]]<- as.matrix(t(apply(.Ysplit[[.i]], 2, mean) ))  # UPDATE FOR UNIV
+
+            }
             } else if (ns[.i]==1){
               ybar[[.i]]<-	t( as.matrix(.Ysplit[[.i]]))
               } else {
@@ -110,18 +117,30 @@ Zmix_main<-function(
 
 ## compute basic values
   nCh<- length(alphas)
-  r<-   dim(y)[2]
-  n<-   dim(y)[1]
+  if(is.vector(y)){
+    r<-1
+    n<-length(y)
+  } else {
+    r<-   dim(y)[2]
+    n<-   dim(y)[1]
+  }
   Loglike <-   rep(0,iterations)
   SteadyScore<-data.frame("Iteration"=c(1:iterations), "K0"=0)
 
 # hyperpriors
   n0<-  tau <-1   # this is tau equiv
   Ck<-	replicate(k, list())
-  b0<-  apply(y,2,mean)
   c0<-  r+1
+if(r>1){
+  b0<-  apply(y,2,mean)
   C0<-  0.75*cov(y)
   d<-   sum(c(1:r))+r
+} else {
+  b0<-  mean(y)
+  C0<-  0.75*var(y)
+  d<-2
+}
+
 
 ## parameters to estimate
 ## storage structure  par[[chain]][[iterations]][[k]]
