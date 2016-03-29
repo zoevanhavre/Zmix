@@ -118,28 +118,31 @@ Zmix_main<-function(
 ## compute basic values
   nCh<- length(alphas)
   if(is.vector(y)){
+    # UNIVARIATE
     r<-1
     n<-length(y)
+    ## univ hyper priors
+    a<-       2.5
+    b<-       2/var(y)
+    lambda<-  sum(y)/n
+    d<-   sum(c(1:r))+r
   } else {
+    # MULTIVARIATE
     r<-   dim(y)[2]
     n<-   dim(y)[1]
+    n0<-  1
+    Ck<-	replicate(k, list())
+    c0<-  r+1
+    b0<-  apply(y,2,mean)
+    C0<-  0.75*cov(y)
+    d<-   sum(c(1:r))+r
   }
+
   Loglike <-   rep(0,iterations)
   SteadyScore<-data.frame("Iteration"=c(1:iterations), "K0"=0)
+  map <-    matrix(0,nrow = iter, ncol = 1)
 
-# hyperpriors
-  n0<-  tau <-1   # this is tau equiv
-  Ck<-	replicate(k, list())
-  c0<-  r+1
-if(r>1){
-  b0<-  apply(y,2,mean)
-  C0<-  0.75*cov(y)
-  d<-   sum(c(1:r))+r
-} else {
-  b0<-  mean(y)
-  C0<-  0.75*var(y)
-  d<-2
-}
+
 
 
 ## parameters to estimate
@@ -156,9 +159,11 @@ for (.it in 1:iterations){  #for each iteration
   # TRACKER
 if(verbose==TRUE && .it %% 10 == 0) {
   Sys.sleep(0.01)
+  if(r>1){
   par(mfrow=c(2,1))
   plot(SteadyScore$K0~SteadyScore$Iteration, main='#non-empty groups', type='l')
   ts.plot( t(sapply(Ps[[nCh]], rbind)), main='Target Weights', col=rainbow(k))
+  }
   Sys.sleep(0)
   setTxtProgressBar(pb, .it)
 }
